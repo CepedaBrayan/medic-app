@@ -1,3 +1,6 @@
 .env
 /venv
 .python-version
+
+#add __pycache__ to .gitignore
+__pycache__/
