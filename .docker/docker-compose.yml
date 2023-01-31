@@ -1,0 +1,16 @@
+version: "3.5"
+
+services: 
+  backend: 
+    container_name: medicapp_backend
+    build: 
+      context: ../backend
+      dockerfile: ../.docker/backend/Dockerfile
+    environment: 
+      DJANGO_SETTINGS_MODULE: "project.settings"
+      SECRET_KEY: "django-insecure-eb6ugwsx$o2o+=emt==m@)giml_lw5pdcm0qr8c4+5kszji3eh"
+    command: python manage.py runserver 0.0.0.0:8080
+    volumes: 
+      - ../backend:/app
+    ports:
+      - "8080:8080"
