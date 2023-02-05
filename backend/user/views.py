@@ -13,4 +13,5 @@ class userViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=["get"])
     def say_hello(self, request):
+        # example for Andrea
         return HttpResponse("Hello World!")
