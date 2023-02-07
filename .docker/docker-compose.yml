@@ -7,10 +7,17 @@ services:
       context: ../backend
       dockerfile: ../.docker/backend/Dockerfile
     environment: 
-      DJANGO_SETTINGS_MODULE: "project.settings"
-      SECRET_KEY: "django-insecure-eb6ugwsx$o2o+=emt==m@)giml_lw5pdcm0qr8c4+5kszji3eh"
+      DJANGO_SETTINGS_MODULE: ${DJANGO_SETTINGS_MODULE}
+      SECRET_KEY: ${SECRET_KEY}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
     command: python manage.py runserver 0.0.0.0:8080
     volumes: 
       - ../backend:/app
     ports:
       - "8080:8080"
+    
+
