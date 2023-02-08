@@ -15,4 +15,3 @@ class userViewSet(viewsets.ModelViewSet):
     def say_hello(self, request):
         # example for Andrea, response with code 200
         return HttpResponse("Hello World", status=200)
-        
