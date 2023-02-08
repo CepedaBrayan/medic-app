@@ -6,9 +6,9 @@ info:
 paths:
   /api/v1/users/:
     get:
-      operationId: api_v1_users_list
+      operationId: v1_users_list
       tags:
-      - api
+      - v1
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -23,9 +23,9 @@ paths:
                   $ref: '#/components/schemas/User'
           description: ''
     post:
-      operationId: api_v1_users_create
+      operationId: v1_users_create
       tags:
-      - api
+      - v1
       requestBody:
         content:
           application/json:
@@ -51,7 +51,7 @@ paths:
           description: ''
   /api/v1/users/{id}/:
     get:
-      operationId: api_v1_users_retrieve
+      operationId: v1_users_retrieve
       parameters:
       - in: path
         name: id
@@ -60,7 +60,7 @@ paths:
         description: A unique integer value identifying this user.
         required: true
       tags:
-      - api
+      - v1
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -73,7 +73,7 @@ paths:
                 $ref: '#/components/schemas/User'
           description: ''
     put:
-      operationId: api_v1_users_update
+      operationId: v1_users_update
       parameters:
       - in: path
         name: id
@@ -82,7 +82,7 @@ paths:
         description: A unique integer value identifying this user.
         required: true
       tags:
-      - api
+      - v1
       requestBody:
         content:
           application/json:
@@ -107,7 +107,7 @@ paths:
                 $ref: '#/components/schemas/User'
           description: ''
     patch:
-      operationId: api_v1_users_partial_update
+      operationId: v1_users_partial_update
       parameters:
       - in: path
         name: id
@@ -116,7 +116,7 @@ paths:
         description: A unique integer value identifying this user.
         required: true
       tags:
-      - api
+      - v1
       requestBody:
         content:
           application/json:
@@ -140,7 +140,7 @@ paths:
                 $ref: '#/components/schemas/User'
           description: ''
     delete:
-      operationId: api_v1_users_destroy
+      operationId: v1_users_destroy
       parameters:
       - in: path
         name: id
@@ -149,7 +149,7 @@ paths:
         description: A unique integer value identifying this user.
         required: true
       tags:
-      - api
+      - v1
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -159,9 +159,9 @@ paths:
           description: No response body
   /api/v1/users/say_hello/:
     get:
-      operationId: api_v1_users_say_hello_retrieve
+      operationId: v1_users_say_hello_retrieve
       tags:
-      - api
+      - v1
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -181,46 +181,49 @@ components:
         id:
           type: integer
           readOnly: true
-        username:
-          type: string
-          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
-            only.
-          pattern: ^[\w.@+-]+$
-          maxLength: 150
         email:
           type: string
           format: email
-          title: Email address
           maxLength: 254
-        password:
+        first_name:
           type: string
-          writeOnly: true
-          maxLength: 128
+          maxLength: 50
+        last_name:
+          type: string
+          maxLength: 50
+        is_active:
+          type: boolean
+        is_admin:
+          type: boolean
+        is_staff:
+          type: boolean
     User:
       type: object
       properties:
         id:
           type: integer
           readOnly: true
-        username:
-          type: string
-          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
-            only.
-          pattern: ^[\w.@+-]+$
-          maxLength: 150
         email:
           type: string
           format: email
-          title: Email address
           maxLength: 254
-        password:
+        first_name:
           type: string
-          writeOnly: true
-          maxLength: 128
+          maxLength: 50
+        last_name:
+          type: string
+          maxLength: 50
+        is_active:
+          type: boolean
+        is_admin:
+          type: boolean
+        is_staff:
+          type: boolean
       required:
+      - email
+      - first_name
       - id
-      - password
-      - username
+      - last_name
   securitySchemes:
     basicAuth:
       type: http
