@@ -199,34 +199,6 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/v1/users/hello/:
-    get:
-      operationId: v1_users_hello_retrieve
-      tags:
-      - v1
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-          description: ''
-  /api/v1/users/hello_you/:
-    get:
-      operationId: v1_users_hello_you_retrieve
-      tags:
-      - v1
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-          description: ''
   /api/v1/users/my_profile/:
     get:
       operationId: v1_users_my_profile_retrieve
