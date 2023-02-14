@@ -60,3 +60,8 @@ class userViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=["get"])
     def hello(self, request):
         return HttpResponse("Hello")
+
+    # endpoint for say hello you
+    @action(detail=False, methods=["get"])
+    def hello_you(self, request):
+        return HttpResponse("Hello you")
