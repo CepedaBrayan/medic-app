@@ -55,8 +55,3 @@ class userViewSet(viewsets.ModelViewSet):
             serializer.save()
             return HttpResponse(status=204)
         return HttpResponse(serializer.errors, status=400)
-
-    # endpoint for say hello
-    @action(detail=False, methods=["get"])
-    def hello(self, request):
-        return HttpResponse("Hello")
