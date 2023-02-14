@@ -1,18 +1,70 @@
 openapi: 3.0.3
 info:
-  title: Your Project API
+  title: Medical App API
   version: 1.0.0
-  description: Your project description
+  description: API for Medical App
 paths:
+  /api/auth:
+    post:
+      operationId: auth_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /api/auth/refresh:
+    post:
+      operationId: auth_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
   /api/v1/users/:
     get:
       operationId: v1_users_list
       tags:
       - v1
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -30,24 +82,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserCreate'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserCreate'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserCreate'
         required: true
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+      - jwtAuth: []
       responses:
         '201':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserCreate'
           description: ''
   /api/v1/users/{id}/:
     get:
@@ -62,9 +112,7 @@ paths:
       tags:
       - v1
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -96,9 +144,7 @@ paths:
               $ref: '#/components/schemas/User'
         required: true
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -129,9 +175,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedUser'
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -151,21 +195,42 @@ paths:
       tags:
       - v1
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+      - jwtAuth: []
       responses:
         '204':
           description: No response body
-  /api/v1/users/say_hello/:
+  /api/v1/users/my_profile/:
     get:
-      operationId: v1_users_say_hello_retrieve
+      operationId: v1_users_my_profile_retrieve
       tags:
       - v1
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSelfUpdate'
+          description: ''
+  /api/v1/users/update_my_password/:
+    patch:
+      operationId: v1_users_update_my_password_partial_update
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+      security:
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -173,8 +238,39 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
           description: ''
+  /api/v1/users/update_my_profile/:
+    patch:
+      operationId: v1_users_update_my_profile_partial_update
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserSelfUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserSelfUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserSelfUpdate'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSelfUpdate'
+          description: ''
 components:
   schemas:
+    AccountTypeEnum:
+      enum:
+      - 1
+      - 2
+      - 3
+      type: integer
     PatchedUser:
       type: object
       properties:
@@ -185,18 +281,130 @@ components:
           type: string
           format: email
           maxLength: 254
+        account_type:
+          allOf:
+          - $ref: '#/components/schemas/AccountTypeEnum'
+          minimum: -2147483648
+          maximum: 2147483647
+        institutional_id:
+          type: string
+          maxLength: 20
         first_name:
           type: string
           maxLength: 50
         last_name:
           type: string
           maxLength: 50
+        dni:
+          type: string
+          maxLength: 20
+        birth_date:
+          type: string
+          format: date
+          nullable: true
+        phone_number:
+          type: string
+          maxLength: 20
+        address:
+          type: string
+          maxLength: 100
+        expiration_date:
+          type: string
+          format: date
+          nullable: true
         is_active:
           type: boolean
-        is_admin:
-          type: boolean
+          readOnly: true
         is_staff:
           type: boolean
+          readOnly: true
+        last_active:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedUserSelfUpdate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        account_type:
+          allOf:
+          - $ref: '#/components/schemas/AccountTypeEnum'
+          readOnly: true
+        institutional_id:
+          type: string
+          maxLength: 20
+        first_name:
+          type: string
+          maxLength: 50
+        last_name:
+          type: string
+          maxLength: 50
+        dni:
+          type: string
+          maxLength: 20
+        birth_date:
+          type: string
+          format: date
+          nullable: true
+        phone_number:
+          type: string
+          maxLength: 20
+        address:
+          type: string
+          maxLength: 100
+        expiration_date:
+          type: string
+          format: date
+          readOnly: true
+          nullable: true
+        is_active:
+          type: boolean
+          readOnly: true
+        is_staff:
+          type: boolean
+          readOnly: true
+        last_active:
+          type: string
+          format: date-time
+          readOnly: true
+    TokenObtainPair:
+      type: object
+      properties:
+        email:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - email
+      - password
+      - refresh
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          writeOnly: true
+      required:
+      - access
+      - refresh
     User:
       type: object
       properties:
@@ -207,28 +415,139 @@ components:
           type: string
           format: email
           maxLength: 254
+        account_type:
+          allOf:
+          - $ref: '#/components/schemas/AccountTypeEnum'
+          minimum: -2147483648
+          maximum: 2147483647
+        institutional_id:
+          type: string
+          maxLength: 20
         first_name:
           type: string
           maxLength: 50
         last_name:
           type: string
           maxLength: 50
+        dni:
+          type: string
+          maxLength: 20
+        birth_date:
+          type: string
+          format: date
+          nullable: true
+        phone_number:
+          type: string
+          maxLength: 20
+        address:
+          type: string
+          maxLength: 100
+        expiration_date:
+          type: string
+          format: date
+          nullable: true
         is_active:
           type: boolean
-        is_admin:
-          type: boolean
+          readOnly: true
         is_staff:
           type: boolean
+          readOnly: true
+        last_active:
+          type: string
+          format: date-time
+          readOnly: true
       required:
       - email
-      - first_name
       - id
-      - last_name
+      - is_active
+      - is_staff
+      - last_active
+    UserCreate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        password:
+          type: string
+          maxLength: 128
+        dni:
+          type: string
+          maxLength: 20
+        account_type:
+          allOf:
+          - $ref: '#/components/schemas/AccountTypeEnum'
+          minimum: -2147483648
+          maximum: 2147483647
+      required:
+      - email
+      - id
+      - password
+    UserSelfUpdate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        account_type:
+          allOf:
+          - $ref: '#/components/schemas/AccountTypeEnum'
+          readOnly: true
+        institutional_id:
+          type: string
+          maxLength: 20
+        first_name:
+          type: string
+          maxLength: 50
+        last_name:
+          type: string
+          maxLength: 50
+        dni:
+          type: string
+          maxLength: 20
+        birth_date:
+          type: string
+          format: date
+          nullable: true
+        phone_number:
+          type: string
+          maxLength: 20
+        address:
+          type: string
+          maxLength: 100
+        expiration_date:
+          type: string
+          format: date
+          readOnly: true
+          nullable: true
+        is_active:
+          type: boolean
+          readOnly: true
+        is_staff:
+          type: boolean
+          readOnly: true
+        last_active:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - account_type
+      - email
+      - expiration_date
+      - id
+      - is_active
+      - is_staff
+      - last_active
   securitySchemes:
-    basicAuth:
+    jwtAuth:
       type: http
-      scheme: basic
-    cookieAuth:
-      type: apiKey
-      in: cookie
-      name: sessionid
+      scheme: bearer
+      bearerFormat: JWT
