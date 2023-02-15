@@ -3,7 +3,7 @@ from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from simple_history.admin import SimpleHistoryAdmin
-from user.models import User
+from user.models import Institution, User
 
 
 class UserCreationForm(forms.ModelForm):
@@ -34,7 +34,35 @@ class UserCreationForm(forms.ModelForm):
 
 
 class UserCustom(SimpleHistoryAdmin, BaseUserAdmin):
-    fieldsets = ()
+    fieldsets = (
+        (
+            ("Credentials"),
+            {"fields": ("email", "password")},
+        ),
+        (
+            ("Personal info"),
+            {
+                "fields": (
+                    "account_type",
+                    "institution",
+                    "institutional_id",
+                    "first_name",
+                    "last_name",
+                    "dni",
+                    "birth_date",
+                    "phone_number",
+                    "address",
+                    "expiration_date",
+                )
+            },
+        ),
+        (
+            ("Permissions"),
+            {
+                "fields": ("is_superuser",),
+            },
+        ),
+    )
     add_fieldsets = (
         (
             ("Credentials"),
@@ -45,6 +73,7 @@ class UserCustom(SimpleHistoryAdmin, BaseUserAdmin):
             {
                 "fields": (
                     "account_type",
+                    "institution",
                     "institutional_id",
                     "first_name",
                     "last_name",
@@ -72,8 +101,9 @@ class UserCustom(SimpleHistoryAdmin, BaseUserAdmin):
         "account_type",
         "date_joined",
     ]
-    readonly_fields = ["is_active", "is_staff", "last_active"]
+    readonly_fields = ["last_active"]
     ordering = ["email"]
 
 
 admin.site.register(User, UserCustom)
+admin.site.register(Institution)

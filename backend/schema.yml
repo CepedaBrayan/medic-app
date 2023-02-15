@@ -58,6 +58,147 @@ paths:
               schema:
                 $ref: '#/components/schemas/TokenRefresh'
           description: ''
+  /api/v1/institutions/:
+    get:
+      operationId: v1_institutions_list
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Institution'
+          description: ''
+    post:
+      operationId: v1_institutions_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Institution'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Institution'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Institution'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Institution'
+          description: ''
+  /api/v1/institutions/{id}/:
+    get:
+      operationId: v1_institutions_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this institution.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Institution'
+          description: ''
+    put:
+      operationId: v1_institutions_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this institution.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Institution'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Institution'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Institution'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Institution'
+          description: ''
+    patch:
+      operationId: v1_institutions_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this institution.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedInstitution'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedInstitution'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedInstitution'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Institution'
+          description: ''
+    delete:
+      operationId: v1_institutions_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this institution.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
   /api/v1/users/:
     get:
       operationId: v1_users_list
@@ -271,6 +412,54 @@ components:
       - 2
       - 3
       type: integer
+    Institution:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        address:
+          type: string
+          maxLength: 100
+        phone_number:
+          type: string
+          maxLength: 20
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        is_active:
+          type: boolean
+          readOnly: true
+      required:
+      - id
+      - is_active
+      - name
+    PatchedInstitution:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        address:
+          type: string
+          maxLength: 100
+        phone_number:
+          type: string
+          maxLength: 20
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        is_active:
+          type: boolean
+          readOnly: true
     PatchedUser:
       type: object
       properties:

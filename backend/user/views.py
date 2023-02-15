@@ -4,9 +4,10 @@ from project.permissions import IsDoctor, IsPatient, IsStudent, IsSuperUser
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
-from user.models import User
+from user.models import Institution, User
 
 from .serializers import (
+    InstitutionSerializer,
     UserCreateSerializer,
     UserSelfUpdateSerializer,
     UserSerializer,
@@ -14,7 +15,7 @@ from .serializers import (
 )
 
 
-class userViewSet(viewsets.ModelViewSet):
+class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     permission_classes = [IsAuthenticated]
 
@@ -24,7 +25,7 @@ class userViewSet(viewsets.ModelViewSet):
             self.permission_classes = [IsSuperUser]
         if self.action in ["list", "retrieve", "partial_update"]:
             self.permission_classes = [IsSuperUser | IsDoctor]
-        return super(userViewSet, self).get_permissions()
+        return super(UserViewSet, self).get_permissions()
 
     def get_serializer_class(self):
         if self.action in ["create"]:
@@ -64,3 +65,13 @@ class userViewSet(viewsets.ModelViewSet):
             serializer.save()
             return HttpResponse(status=204)
         return HttpResponse(serializer.errors, status=400)
+
+
+class InstitutionViewSet(viewsets.ModelViewSet):
+    queryset = Institution.objects.all()
+    serializer_class = InstitutionSerializer
+    permission_classes = [IsSuperUser]
+
+    # disable put method
+    def update(self, request, *args, **kwargs):
+        return HttpResponse(status=405)

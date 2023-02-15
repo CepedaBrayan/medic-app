@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from user.models import User
+from user.models import Institution, User
 
 
 # create user serializer
@@ -86,3 +86,22 @@ class UserUpdatePasswordSerializer(serializers.ModelSerializer):
             instance.set_password(validated_data["new_password"])
             instance.save()
             return instance
+
+
+class InstitutionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Institution
+        fields = (
+            "id",
+            "name",
+            "address",
+            "phone_number",
+            "email",
+            "is_active",
+        )
+        read_only_fields = ("id", "is_active")
+
+    # create institution
+    def create(self, validated_data):
+        institution = Institution.objects.create(**validated_data)
+        return institution
