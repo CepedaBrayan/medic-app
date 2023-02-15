@@ -6,7 +6,12 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from user.models import User
 
-from .serializers import UserCreateSerializer, UserSelfUpdateSerializer, UserSerializer
+from .serializers import (
+    UserCreateSerializer,
+    UserSelfUpdateSerializer,
+    UserSerializer,
+    UserUpdatePasswordSerializer,
+)
 
 
 class userViewSet(viewsets.ModelViewSet):
@@ -27,6 +32,9 @@ class userViewSet(viewsets.ModelViewSet):
         # for endpoint my_profile use UserSelfUpdateSerializer
         if self.action in ["my_profile", "update_my_profile"]:
             return UserSelfUpdateSerializer
+        # for endpoint update_my_password use UserUpdatePasswordSerializer
+        if self.action in ["update_my_password"]:
+            return UserUpdatePasswordSerializer
         return UserSerializer
 
     # disable put method
@@ -36,10 +44,11 @@ class userViewSet(viewsets.ModelViewSet):
     # endpoint for update password
     @action(detail=False, methods=["patch"])
     def update_my_password(self, request):
-        user = request.user
-        user.set_password(request.data["password"])
-        user.save()
-        return HttpResponse(status=204)
+        serializer = UserUpdatePasswordSerializer(request.user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return HttpResponse(status=204)
+        return HttpResponse(serializer.errors, status=400)
 
     # endpoint for see my profile
     @action(detail=False, methods=["get"])

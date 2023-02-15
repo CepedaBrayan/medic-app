@@ -70,3 +70,19 @@ class UserSelfUpdateSerializer(serializers.ModelSerializer):
             "is_staff",
             "last_active",
         )
+
+
+class UserUpdatePasswordSerializer(serializers.ModelSerializer):
+    new_password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = ("id", "password", "new_password")
+        read_only_fields = ("id",)
+
+    # update user password
+    def update(self, instance, validated_data):
+        if instance.check_password(validated_data["password"]):
+            instance.set_password(validated_data["new_password"])
+            instance.save()
+            return instance

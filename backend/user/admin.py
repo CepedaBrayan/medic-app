@@ -11,6 +11,7 @@ class UserCreationForm(forms.ModelForm):
         model = User
         fields = (
             "email",
+            "password",
             "account_type",
             "institutional_id",
             "first_name",
@@ -24,16 +25,21 @@ class UserCreationForm(forms.ModelForm):
             "is_staff",
         )
 
-        def save(self, commit=True):
-            user = super().save(commit=False)
-            if commit:
-                user.save()
-            return user
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        if commit:
+            user.save()
+        return user
 
 
 class UserCustom(SimpleHistoryAdmin, BaseUserAdmin):
-    fieldsets = (
-        (None, {"fields": ("email", "password")}),
+    fieldsets = ()
+    add_fieldsets = (
+        (
+            ("Credentials"),
+            {"fields": ("email", "password")},
+        ),
         (
             ("Personal info"),
             {
@@ -53,11 +59,7 @@ class UserCustom(SimpleHistoryAdmin, BaseUserAdmin):
         (
             ("Permissions"),
             {
-                "fields": (
-                    "is_active",
-                    "is_staff",
-                    "is_superuser",
-                ),
+                "fields": ("is_superuser",),
             },
         ),
     )

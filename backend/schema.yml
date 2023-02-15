@@ -222,13 +222,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedUser'
+              $ref: '#/components/schemas/PatchedUserUpdatePassword'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedUser'
+              $ref: '#/components/schemas/PatchedUserUpdatePassword'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedUser'
+              $ref: '#/components/schemas/PatchedUserUpdatePassword'
       security:
       - jwtAuth: []
       responses:
@@ -236,7 +236,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserUpdatePassword'
           description: ''
   /api/v1/users/update_my_profile/:
     patch:
@@ -373,6 +373,18 @@ components:
           type: string
           format: date-time
           readOnly: true
+    PatchedUserUpdatePassword:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        password:
+          type: string
+          maxLength: 128
+        new_password:
+          type: string
+          writeOnly: true
     TokenObtainPair:
       type: object
       properties:
@@ -457,6 +469,7 @@ components:
           format: date-time
           readOnly: true
       required:
+      - dni
       - email
       - id
       - is_active
@@ -484,6 +497,7 @@ components:
           minimum: -2147483648
           maximum: 2147483647
       required:
+      - dni
       - email
       - id
       - password
@@ -540,12 +554,29 @@ components:
           readOnly: true
       required:
       - account_type
+      - dni
       - email
       - expiration_date
       - id
       - is_active
       - is_staff
       - last_active
+    UserUpdatePassword:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        password:
+          type: string
+          maxLength: 128
+        new_password:
+          type: string
+          writeOnly: true
+      required:
+      - id
+      - new_password
+      - password
   securitySchemes:
     jwtAuth:
       type: http
