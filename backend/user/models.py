@@ -1,3 +1,5 @@
+import random
+
 from django.contrib.auth.models import AbstractUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from project.constants import UserAccountType
@@ -29,7 +31,7 @@ class UserManager(BaseUserManager):
         user = self.create_user(
             email,
             password=password,
-            dni="00000000",
+            dni=random.randint(00000000, 99999999),
         )
         user.is_admin = True
         user.is_staff = True
