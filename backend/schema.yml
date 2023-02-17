@@ -411,6 +411,7 @@ components:
       - 1
       - 2
       - 3
+      - 4
       type: integer
     Institution:
       type: object

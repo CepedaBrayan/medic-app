@@ -12,6 +12,8 @@ class UserManager(BaseUserManager):
             # if not password, generate a random password
         if not password:
             password = self.make_random_password()
+        if not account_type:
+            account_type = UserAccountType.OTHER.value
 
         user = self.model(
             email=self.normalize_email(email),
@@ -24,7 +26,11 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, password):
-        user = self.create_user(email, password=password, dni="00000000")
+        user = self.create_user(
+            email,
+            password=password,
+            dni="00000000",
+        )
         user.is_admin = True
         user.is_staff = True
         user.is_superuser = True
