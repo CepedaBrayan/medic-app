@@ -180,13 +180,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedUser'
+              $ref: '#/components/schemas/PatchedUserSelfUpdate'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedUser'
+              $ref: '#/components/schemas/PatchedUserSelfUpdate'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedUser'
+              $ref: '#/components/schemas/PatchedUserSelfUpdate'
       security:
       - jwtAuth: []
       responses:
@@ -194,7 +194,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserSelfUpdate'
           description: ''
 components:
   schemas:
@@ -231,7 +231,7 @@ components:
       - id
       - is_active
       - name
-    PatchedUser:
+    PatchedUserSelfUpdate:
       type: object
       properties:
         id:
@@ -244,8 +244,7 @@ components:
         account_type:
           allOf:
           - $ref: '#/components/schemas/AccountTypeEnum'
-          minimum: -2147483648
-          maximum: 2147483647
+          readOnly: true
         institutional_id:
           type: string
           maxLength: 20
@@ -271,6 +270,7 @@ components:
         expiration_date:
           type: string
           format: date
+          readOnly: true
           nullable: true
         is_active:
           type: boolean
@@ -380,6 +380,66 @@ components:
       required:
       - dni
       - email
+      - id
+      - is_active
+      - is_staff
+      - last_active
+    UserSelfUpdate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        account_type:
+          allOf:
+          - $ref: '#/components/schemas/AccountTypeEnum'
+          readOnly: true
+        institutional_id:
+          type: string
+          maxLength: 20
+        first_name:
+          type: string
+          maxLength: 50
+        last_name:
+          type: string
+          maxLength: 50
+        dni:
+          type: string
+          maxLength: 20
+        birth_date:
+          type: string
+          format: date
+          nullable: true
+        phone_number:
+          type: string
+          maxLength: 20
+        address:
+          type: string
+          maxLength: 100
+        expiration_date:
+          type: string
+          format: date
+          readOnly: true
+          nullable: true
+        is_active:
+          type: boolean
+          readOnly: true
+        is_staff:
+          type: boolean
+          readOnly: true
+        last_active:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - account_type
+      - dni
+      - email
+      - expiration_date
       - id
       - is_active
       - is_staff

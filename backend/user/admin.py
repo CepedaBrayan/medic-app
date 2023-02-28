@@ -53,6 +53,7 @@ class UserCustom(SimpleHistoryAdmin, BaseUserAdmin):
                     "phone_number",
                     "address",
                     "expiration_date",
+                    "is_active",
                 )
             },
         ),
@@ -82,6 +83,7 @@ class UserCustom(SimpleHistoryAdmin, BaseUserAdmin):
                     "phone_number",
                     "address",
                     "expiration_date",
+                    "is_active",
                 )
             },
         ),

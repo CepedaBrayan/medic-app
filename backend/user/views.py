@@ -9,6 +9,7 @@ from user.models import Institution, User
 
 from .serializers import (
     InstitutionSerializer,
+    UserSelfUpdateSerializer,
     UserSerializer,
     UserUpdatePasswordSerializer,
 )
@@ -31,6 +32,8 @@ class UserViewSet(
     def get_serializer_class(self):
         if self.action in ["update_my_password"]:
             return UserUpdatePasswordSerializer
+        if self.action in ["update_my_profile"]:
+            return UserSelfUpdateSerializer
         return UserSerializer
 
     # endpoint for overwrite list method, just users with is_active = True
@@ -61,7 +64,7 @@ class UserViewSet(
         )
         if serializer.is_valid():
             serializer.save()
-            return Response(status=204)
+            return Response(serializer.data, status=200)
         return Response(serializer.errors, status=400)
 
     # endpoint for update password
@@ -70,7 +73,7 @@ class UserViewSet(
         serializer = self.get_serializer_class()(request.user, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(status=204)
+            return Response({"message": "Password updated"}, status=200)
         return Response(serializer.errors, status=400)
 
 
