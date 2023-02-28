@@ -3,13 +3,6 @@ from rest_framework.request import Request
 from user.models import UserAccountType
 
 
-class IsSuperUser(BasePermission):
-    message = "You are not a superuser."
-
-    def has_permission(self, request: Request, view) -> bool:
-        return bool(request.user and request.user.is_superuser)
-
-
 class IsDoctor(BasePermission):
     message = "You are not a doctor."
 

@@ -74,31 +74,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/Institution'
           description: ''
-    post:
-      operationId: v1_institutions_create
-      tags:
-      - v1
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Institution'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Institution'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Institution'
-        required: true
-      security:
-      - jwtAuth: []
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Institution'
-          description: ''
   /api/v1/institutions/{id}/:
     get:
       operationId: v1_institutions_retrieve
@@ -120,85 +95,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Institution'
           description: ''
-    put:
-      operationId: v1_institutions_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this institution.
-        required: true
-      tags:
-      - v1
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Institution'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Institution'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Institution'
-        required: true
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Institution'
-          description: ''
-    patch:
-      operationId: v1_institutions_partial_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this institution.
-        required: true
-      tags:
-      - v1
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedInstitution'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PatchedInstitution'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PatchedInstitution'
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Institution'
-          description: ''
-    delete:
-      operationId: v1_institutions_destroy
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this institution.
-        required: true
-      tags:
-      - v1
-      security:
-      - jwtAuth: []
-      responses:
-        '204':
-          description: No response body
   /api/v1/users/:
     get:
       operationId: v1_users_list
@@ -214,31 +110,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
-          description: ''
-    post:
-      operationId: v1_users_create
-      tags:
-      - v1
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserCreate'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/UserCreate'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/UserCreate'
-        required: true
-      security:
-      - jwtAuth: []
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserCreate'
           description: ''
   /api/v1/users/{id}/:
     get:
@@ -261,85 +132,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
           description: ''
-    put:
-      operationId: v1_users_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this user.
-        required: true
-      tags:
-      - v1
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/User'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/User'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/User'
-        required: true
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-          description: ''
-    patch:
-      operationId: v1_users_partial_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this user.
-        required: true
-      tags:
-      - v1
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedUser'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PatchedUser'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PatchedUser'
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-          description: ''
-    delete:
-      operationId: v1_users_destroy
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this user.
-        required: true
-      tags:
-      - v1
-      security:
-      - jwtAuth: []
-      responses:
-        '204':
-          description: No response body
   /api/v1/users/my_profile/:
     get:
       operationId: v1_users_my_profile_retrieve
@@ -352,7 +144,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserSelfUpdate'
+                $ref: '#/components/schemas/User'
           description: ''
   /api/v1/users/update_my_password/:
     patch:
@@ -388,13 +180,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedUserSelfUpdate'
+              $ref: '#/components/schemas/PatchedUser'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedUserSelfUpdate'
+              $ref: '#/components/schemas/PatchedUser'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedUserSelfUpdate'
+              $ref: '#/components/schemas/PatchedUser'
       security:
       - jwtAuth: []
       responses:
@@ -402,7 +194,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserSelfUpdate'
+                $ref: '#/components/schemas/User'
           description: ''
 components:
   schemas:
@@ -439,28 +231,6 @@ components:
       - id
       - is_active
       - name
-    PatchedInstitution:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        name:
-          type: string
-          maxLength: 100
-        address:
-          type: string
-          maxLength: 100
-        phone_number:
-          type: string
-          maxLength: 20
-        email:
-          type: string
-          format: email
-          maxLength: 254
-        is_active:
-          type: boolean
-          readOnly: true
     PatchedUser:
       type: object
       properties:
@@ -501,57 +271,6 @@ components:
         expiration_date:
           type: string
           format: date
-          nullable: true
-        is_active:
-          type: boolean
-          readOnly: true
-        is_staff:
-          type: boolean
-          readOnly: true
-        last_active:
-          type: string
-          format: date-time
-          readOnly: true
-    PatchedUserSelfUpdate:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        email:
-          type: string
-          format: email
-          maxLength: 254
-        account_type:
-          allOf:
-          - $ref: '#/components/schemas/AccountTypeEnum'
-          readOnly: true
-        institutional_id:
-          type: string
-          maxLength: 20
-        first_name:
-          type: string
-          maxLength: 50
-        last_name:
-          type: string
-          maxLength: 50
-        dni:
-          type: string
-          maxLength: 20
-        birth_date:
-          type: string
-          format: date
-          nullable: true
-        phone_number:
-          type: string
-          maxLength: 20
-        address:
-          type: string
-          maxLength: 100
-        expiration_date:
-          type: string
-          format: date
-          readOnly: true
           nullable: true
         is_active:
           type: boolean
@@ -661,92 +380,6 @@ components:
       required:
       - dni
       - email
-      - id
-      - is_active
-      - is_staff
-      - last_active
-    UserCreate:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        email:
-          type: string
-          format: email
-          maxLength: 254
-        password:
-          type: string
-          maxLength: 128
-        dni:
-          type: string
-          maxLength: 20
-        account_type:
-          allOf:
-          - $ref: '#/components/schemas/AccountTypeEnum'
-          minimum: -2147483648
-          maximum: 2147483647
-      required:
-      - dni
-      - email
-      - id
-      - password
-    UserSelfUpdate:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        email:
-          type: string
-          format: email
-          maxLength: 254
-        account_type:
-          allOf:
-          - $ref: '#/components/schemas/AccountTypeEnum'
-          readOnly: true
-        institutional_id:
-          type: string
-          maxLength: 20
-        first_name:
-          type: string
-          maxLength: 50
-        last_name:
-          type: string
-          maxLength: 50
-        dni:
-          type: string
-          maxLength: 20
-        birth_date:
-          type: string
-          format: date
-          nullable: true
-        phone_number:
-          type: string
-          maxLength: 20
-        address:
-          type: string
-          maxLength: 100
-        expiration_date:
-          type: string
-          format: date
-          readOnly: true
-          nullable: true
-        is_active:
-          type: boolean
-          readOnly: true
-        is_staff:
-          type: boolean
-          readOnly: true
-        last_active:
-          type: string
-          format: date-time
-          readOnly: true
-      required:
-      - account_type
-      - dni
-      - email
-      - expiration_date
       - id
       - is_active
       - is_staff
